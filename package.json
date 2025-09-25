@@ -1,0 +1,27 @@
+{
+  "name": "notes-app",
+  "version": "1.0.0",
+  "description": "A simple full-stack Notes application built with **React.js** (frontend), **Node.js + Express** (backend), and **MongoDB Atlas** (database).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm:dev-backend\" \"npm:dev-frontend\"",
+    "dev-backend": "cd backend && npm run dev",
+    "dev-frontend": "cd frontend && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ignia707/notes-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Ignia707/notes-app/issues"
+  },
+  "homepage": "https://github.com/Ignia707/notes-app#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
