@@ -11,6 +11,9 @@ export default function NoteList({ notes, onUpdated }) {
     }
   };
 
+  if (notes.length === 0)
+    return <p style={{ color: "#888" }}>No notes yet. Create one above!</p>;
+
   return (
     <div>
       {notes.map(({ _id, title, content, createdAt }) => (
