@@ -3,8 +3,12 @@ import api from "../services/api";
 
 export default function NoteList({ notes, onUpdated }) {
   const remove = async (id) => {
-    await api.delete(`/notes/${id}`);
-    onUpdated();
+    try {
+      await api.delete(`/notes/${id}`);
+      onUpdated();
+    } catch (err) {
+      alert("Failed to delete note. Please try again.");
+    }
   };
 
   return (

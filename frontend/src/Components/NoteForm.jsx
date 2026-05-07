@@ -5,18 +5,25 @@ import { useState } from "react";
 export default function NoteForm({ onCreated }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [error, setError] = useState(null);
 
   const submit = async (e) => {
     e.preventDefault();
     if (!title) return alert("title required");
-    await api.post("/notes", { title, content });
-    setTitle("");
-    setContent("");
-    onCreated();
+    try {
+      await api.post("/notes", { title, content });
+      setTitle("");
+      setContent("");
+      setError(null);
+      onCreated();
+    } catch (err) {
+      setError("Failed to create note. Please try again.");
+    }
   };
 
   return (
     <form onSubmit={submit} style={{ margin: 100 }}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}

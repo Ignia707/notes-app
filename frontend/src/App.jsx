@@ -7,10 +7,16 @@ import "./App.css";
 
 function App() {
   const [notes, setNotes] = useState([]);
+  const [error, setError] = useState(null);
 
   const fetchNotes = async () => {
-    const res = await api.get("/notes");
-    setNotes(res.data);
+    try {
+      const res = await api.get("/notes");
+      setNotes(res.data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to load notes. Is the server running?");
+    }
   };
 
   useEffect(() => {
@@ -19,6 +25,7 @@ function App() {
   return (
     <div style={{ padding: 20 }}>
       <h1> Notes </h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <NoteForm onCreated={fetchNotes} />
       <NoteList notes={notes} onUpdated={fetchNotes} />
     </div>
