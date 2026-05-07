@@ -19,9 +19,11 @@ router.get("/", async (req, res) => {
 
 // POST /api/notes
 router.post("/", async (req, res) => {
+  const { title, content } = req.body;
+  if (!title || !title.trim())
+    return res.status(400).json({ error: "Title is required" });
   try {
-    const { title, content } = req.body;
-    const note = new Note({ title, content });
+    const note = new Note({ title: title.trim(), content: content?.trim() });
     await note.save();
     res.status(201).json(note);
   } catch (err) {
@@ -48,11 +50,16 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   if (!isValidId(req.params.id))
     return res.status(400).json({ error: "Invalid note ID" });
+  const { title, content } = req.body;
+  if (title !== undefined && !title.trim())
+    return res.status(400).json({ error: "Title cannot be empty" });
   try {
-    const { title, content } = req.body;
+    const update = {};
+    if (title !== undefined) update.title = title.trim();
+    if (content !== undefined) update.content = content.trim();
     const note = await Note.findByIdAndUpdate(
       req.params.id,
-      { title, content },
+      update,
       { new: true }
     );
     if (!note) return res.status(404).json({ error: "Not found" });
