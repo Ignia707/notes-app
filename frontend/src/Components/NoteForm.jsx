@@ -6,18 +6,25 @@ export default function NoteForm({ onCreated }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!title) return alert("title required");
+    if (!title.trim()) {
+      setError("Title is required.");
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
     try {
-      await api.post("/notes", { title, content });
+      await api.post("/notes", { title: title.trim(), content: content.trim() });
       setTitle("");
       setContent("");
-      setError(null);
       onCreated();
     } catch (err) {
       setError("Failed to create note. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -42,7 +49,9 @@ export default function NoteForm({ onCreated }) {
       <br />
       <br />
 
-      <button type="submit"> Create </button>
+      <button type="submit" disabled={submitting}>
+        {submitting ? "Creating..." : "Create"}
+      </button>
     </form>
   );
 }
